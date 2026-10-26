@@ -11,7 +11,7 @@ import { useColorScheme } from "react-native";
 
 import { AuthProvider } from "@/features/auth/presentation/context/AuthContext";
 import { AnimatedSplashOverlay } from "@/shared/components/animated-icon";
-import { initializeLocalNotifications } from "@/shared/services/LocalNotificationService";
+import { setupNotifications } from "@/shared/services/LocalNotificationService";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,7 +19,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    initializeLocalNotifications();
+    setupNotifications();
   }, []);
 
   return (

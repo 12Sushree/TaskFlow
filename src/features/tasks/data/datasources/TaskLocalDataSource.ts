@@ -36,6 +36,10 @@ export class TaskLocalDataSource {
   }
 
   async createTask(input: CreateTaskInput) {
+    if (!input.title.trim()) {
+      throw new Error("Task title is required.");
+    }
+
     const tasks =
       await this.getStoredTasks();
 

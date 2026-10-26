@@ -1,15 +1,14 @@
-import { GetUsers } from "@/features/user/domain/usecases/GetUsers";
-
-import { AuthLocalDataSource } from "@/features/auth/data/datasources/AuthLocalDataSource";
-
+import { UserRemoteDataSource } from "@/features/user/data/datasources/UserRemoteDataSource";
 import { UserRepositoryImpl } from "@/features/user/data/repositories/UserRepositoryImpl";
 
-const authLocalDataSource =
-  new AuthLocalDataSource();
+import { GetUsers } from "@/features/user/domain/usecases/GetUsers";
+
+const userRemoteDataSource =
+  new UserRemoteDataSource();
 
 const userRepository =
   new UserRepositoryImpl(
-    authLocalDataSource
+    userRemoteDataSource
   );
 
 export const getUsers =

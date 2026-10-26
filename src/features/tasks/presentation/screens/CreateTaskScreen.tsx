@@ -85,10 +85,16 @@ export default function CreateTaskScreen() {
         createdBy: user.id,
       });
 
-      await showLocalNotification({
-        title: "Task Created",
-        body: `"${input.title}" was created successfully.`,
-      });
+      router.back();
+
+      try {
+        await showLocalNotification(
+          "Task Created",
+          `Task "${title}" was created successfully.`
+        );
+      } catch (error) {
+        console.error("Failed to show local notification:", error);
+      }
 
       if (createdTask.assignedTo) {
         try {
@@ -103,8 +109,6 @@ export default function CreateTaskScreen() {
           console.error("Failed to create notification:",error);
         }
       }
-
-      router.back();
     } catch (error) {
       setError(
         error instanceof Error

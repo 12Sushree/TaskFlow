@@ -1,7 +1,12 @@
 import type { User } from "@/features/auth/domain/entities/User";
 
-export interface AuthRepository {
-  signup(user: User): Promise<User>;
+export interface AuthResponse {
+  user: User;
+  token: string;
+}
 
-  login(email: string, password: string): Promise<User>;
+export interface AuthRepository {
+  signup(user: User): Promise<AuthResponse>;
+
+  login(email: string, password: string): Promise<AuthResponse>;
 }

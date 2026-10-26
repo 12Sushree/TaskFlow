@@ -16,6 +16,7 @@ import type { User } from "@/features/auth/domain/entities/User";
 import { getTaskById, updateTask } from "@/config/dependencies/TaskDependencies";
 import { getUsers } from "@/config/dependencies/UserDependencies";
 import { createNotification } from "@/config/dependencies/NotificationDependencies";
+import { showLocalNotification } from "@/shared/services/LocalNotificationService.ts";
 
 import UserSelector from "@/features/tasks/presentation/components/UserSelector";
 import AppInput from "@/shared/components/ui/AppInput";
@@ -106,20 +107,38 @@ export default function EditTaskScreen() {
 
       await updateTask.execute(id, input);
 
+      router.replace(`/admin/tasks/${id}`);
+
+      try {
+        if(task.assignedTo !== assignedTo) {
+          await showLocalNotification(
+            "Task Reassigned",
+            `"${title}" reassigned successfully.`
+          );
+        } else {
+          await showLocalNotification(
+            "Task Updated",
+            `"${title}" updated successfully.`
+          );
+        }
+      } catch (error) {
+        console.error("Failed to show local notification:", error);
+      }
+
       if (assignedTo) {
         try {
-          const wasReassigned =
+          const isReassigned =
             task.assignedTo !== assignedTo;
 
           await createNotification.execute({
             userId: assignedTo,
-            title: wasReassigned
+            title: isReassigned
               ? "Task Assigned"
               : "Task Updated",
-            message: wasReassigned
+            message: isReassigned
               ? `You have been assigned to the task "${title.trim()}".`
               : `The task "${title.trim()}" has been updated.`,
-            type: wasReassigned
+            type: isReassigned
               ? "TASK_ASSIGNED"
               : "TASK_UPDATED",
             taskId: task.id,
@@ -131,8 +150,6 @@ export default function EditTaskScreen() {
           );
         }
       }
-
-      router.replace(`/admin/tasks/${id}`);
     } catch (error) {
       setError(
         error instanceof Error

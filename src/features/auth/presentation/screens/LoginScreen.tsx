@@ -30,11 +30,11 @@ export default function LoginScreen() {
     try {
       setError(null);
 
-      const user = await login.execute(
+      const { user, token } = await login.execute(
         email,
         password
       );
-      setAuthenticatedUser(user);
+      await setAuthenticatedUser(user, token);
 
       router.replace("/");
     } catch (error) {

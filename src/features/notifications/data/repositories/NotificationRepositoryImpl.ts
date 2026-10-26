@@ -2,12 +2,12 @@ import type {
   CreateNotificationInput,
   NotificationRepository,
 } from "@/features/notifications/domain/repositories/NotificationRepository";
-import { NotificationLocalDataSource } from "@features/notifications/data/datasources/NotificationLocalDataSource";
+import { NotificationRemoteDataSource } from "../datasources/NotificationRemoteDataSource";
 
 export class NotificationRepositoryImpl implements NotificationRepository {
-  private readonly dataSource: NotificationLocalDataSource;
+  private readonly dataSource: NotificationRemoteDataSource;
 
-  constructor(dataSource: NotificationLocalDataSource) {
+  constructor(dataSource: NotificationRemoteDataSource) {
     this.dataSource = dataSource;
   }
 

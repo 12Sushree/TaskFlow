@@ -5,14 +5,14 @@ import { UpdateTask } from "@/features/tasks/domain/usecases/UpdateTask";
 import { GetAssignedTasks } from "@/features/tasks/domain/usecases/GetAssignedTasks";
 import { GetTasksCreatedBy } from "@/features/tasks/domain/usecases/GetTasksCreatedBy";
 
-import { TaskLocalDataSource } from "@/features/tasks/data/datasources/TaskLocalDataSource";
+import { TaskRemoteDataSource } from "@/features/tasks/data/datasources/TaskRemoteDataSource";
 
 import { TaskRepositoryImpl } from "@/features/tasks/data/repositories/TaskRepositoryImpl";
 
-const taskLocalDataSource = new TaskLocalDataSource();
+const taskRemoteDataSource = new TaskRemoteDataSource();
 
 const taskRepository = new TaskRepositoryImpl(
-  taskLocalDataSource
+  taskRemoteDataSource
 );
 
 export const createTask =

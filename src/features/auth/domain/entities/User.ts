@@ -4,7 +4,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  password: string;
   role: UserRole;
   createdAt: string;
+  updatedAt?: string;
+  password?: string; // Keep for local creation if needed, though API won't return it
 }

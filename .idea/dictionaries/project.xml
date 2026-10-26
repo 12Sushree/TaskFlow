@@ -1,7 +1,11 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>bcryptjs</w>
       <w>fafb</w>
+      <w>jsonwebtoken</w>
+      <w>postinstall</w>
+      <w>prisma</w>
       <w>taskflow</w>
       <w>usecases</w>
     </words>

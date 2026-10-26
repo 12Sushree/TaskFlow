@@ -37,7 +37,7 @@ export default function SignupScreen() {
     try {
       setError(null);
 
-      await signup.execute(
+      const { user, token } = await signup.execute(
         name,
         email,
         password,
@@ -45,7 +45,13 @@ export default function SignupScreen() {
         role
       );
 
-      router.replace("/login");
+      // Optionally auto-login if token is present
+      if (token) {
+        await setAuthenticatedUser(user, token);
+        router.replace("/");
+      } else {
+        router.replace("/login");
+      }
     } catch (error) {
       setError(
         error instanceof Error

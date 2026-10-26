@@ -3,14 +3,13 @@ import type {
   TaskRepository,
   UpdateTaskInput,
 } from "@/features/tasks/domain/repositories/TaskRepository";
-
 import type { Task } from "@/features/tasks/domain/entities/Task";
-import { TaskLocalDataSource } from "../datasources/TaskLocalDataSource";
+import { TaskRemoteDataSource } from "../datasources/TaskRemoteDataSource";
 
 export class TaskRepositoryImpl implements TaskRepository {
-  private readonly dataSource: TaskLocalDataSource;
+  private readonly dataSource: TaskRemoteDataSource;
 
-  constructor(dataSource: TaskLocalDataSource) {
+  constructor(dataSource: TaskRemoteDataSource) {
     this.dataSource = dataSource;
   }
 
@@ -26,10 +25,7 @@ export class TaskRepositoryImpl implements TaskRepository {
     return this.dataSource.getTaskById(id);
   }
 
-  async updateTask(id: string,input: UpdateTaskInput) {
-    return this.dataSource.updateTask(
-      id,
-      input
-    );
+  async updateTask(id: string, input: UpdateTaskInput) {
+    return this.dataSource.updateTask(id, input);
   }
 }

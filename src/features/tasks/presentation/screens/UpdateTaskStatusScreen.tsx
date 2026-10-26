@@ -13,13 +13,9 @@ import { router, useLocalSearchParams } from "expo-router";
 
 import type { Task } from "@/features/tasks/domain/entities/Task";
 import type { UpdateTaskInput } from "@/features/tasks/domain/repositories/TaskRepository";
-
-import {
-  getTaskById,
-  updateTask,
-} from "@/config/dependencies/TaskDependencies";
-
+import { getTaskById, updateTask } from "@/config/dependencies/TaskDependencies";
 import { createNotification } from "@/config/dependencies/NotificationDependencies";
+import { showLocalNotification } from "@/shared/services/LocalNotificationService.ts";
 
 import AppButton from "@/shared/components/ui/AppButton";
 
@@ -112,6 +108,15 @@ export default function UpdateTaskStatusScreen() {
       };
 
       await updateTask.execute(id, input);
+
+      try {
+        await showLocalNotification(
+          "Task Status Updated",
+          `"${task.title}" status updated successfully.`
+        );
+      } catch (error) {
+        console.error("Failed to show local notification:", error);
+      }
 
       if (status !== task.status) {
         try {

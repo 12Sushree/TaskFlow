@@ -10,54 +10,48 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const ANDROID_CHANNEL_ID = "taskflow";
+const NOTIFICATION_CHANNEL_ID = "taskflow";
 
-export async function initializeLocalNotifications() {
+export async function setupNotifications() {
+  const { status: existingStatus } =
+    await Notifications.getPermissionsAsync();
+
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== "granted") {
+    const { status } =
+      await Notifications.requestPermissionsAsync();
+
+    finalStatus = status;
+  }
+
+  if (finalStatus !== "granted") {
+    console.log("Notification permission not granted");
+    return false;
+  }
+
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync(
-      ANDROID_CHANNEL_ID,
+      "taskflow",
       {
         name: "TaskFlow Notifications",
         importance: Notifications.AndroidImportance.HIGH,
-        sound: "default",
+        vibrationPattern: [0, 250, 250, 250],
       }
     );
-  }
-
-  const permissions =
-    await Notifications.getPermissionsAsync();
-
-  if (!permissions.granted) {
-    const permissionResponse =
-      await Notifications.requestPermissionsAsync();
-
-    return permissionResponse.granted;
   }
 
   return true;
 }
 
-type ShowLocalNotificationInput = {
-  title: string;
-  body: string;
-};
-
-export async function showLocalNotification({
-  title,
-  body,
-}: ShowLocalNotificationInput) {
-  const hasPermission =
-    await initializeLocalNotifications();
-
-  if (!hasPermission) {
-    return;
-  }
-
+export async function showLocalNotification(
+  title: string,
+  body: string
+) {
   await Notifications.scheduleNotificationAsync({
     content: {
       title,
       body,
-      sound: "default",
     },
     trigger: null,
   });
